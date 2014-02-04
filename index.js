@@ -1,7 +1,7 @@
 var parse = require('esprima-six').parse;
 
 module.exports = function (src) {
-    var ast = typeof src === 'string' ? parse(src) : src;
+    var ast = typeof src === 'string' ? parse(src, { tolerant: true }) : src;
     return function (cb) {
         walk(ast, undefined, cb);
     };
