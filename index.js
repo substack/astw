@@ -1,4 +1,4 @@
-var parse = require('esprima').parse;
+var parse = require('esprima-fb').parse;
 
 module.exports = function (src) {
     var ast = typeof src === 'string' ? parse(src) : src;
@@ -12,7 +12,7 @@ function walk (node, parent, cb) {
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         if (key === 'parent') continue;
-        
+
         var child = node[key];
         if (isArray(child)) {
             for (var j = 0; j < child.length; j++) {
