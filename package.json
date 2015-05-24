@@ -4,7 +4,8 @@
   "description": "walk the ast with references to parent nodes",
   "main": "index.js",
   "dependencies": {
-    "acorn": "^1.0.3"
+    "acorn": "^1.0.3",
+    "xtend": "^4.0.0"
   },
   "devDependencies": {
     "tape": "~2.4.1",

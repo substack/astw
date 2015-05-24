@@ -1,13 +1,15 @@
 var parse = require('acorn').parse;
+var xtend = require('xtend');
 
-module.exports = function (src) {
+module.exports = function (src, opts) {
     var ast = src;
     if (typeof src === 'string') {
         try {
-            ast = parse(src, {
+            ast = parse(src, xtend({
                 ecmaVersion: 6,
-                allowReturnOutsideFunction: true
-            })
+                allowReturnOutsideFunction: true,
+                allowHashBang: true
+            }, opts));
         }
         catch (err) { ast = parse('(' + src + ')') }
     }
@@ -17,13 +19,17 @@ module.exports = function (src) {
 };
 
 function walk (node, parent, cb) {
-    var keys = objectKeys(node);
-    for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
+    for (var key in node) {
+        if (!node.hasOwnProperty(key)) continue;
+        if (typeof node[key] !== 'object' || !node[key]) continue;
         if (key === 'parent') continue;
         
         var child = node[key];
-        if (isArray(child)) {
+        if (typeof child.type === 'string') {
+            child.parent = node;
+            walk(child, node, cb);
+        }
+        else if (Array.isArray(child)) {
             for (var j = 0; j < child.length; j++) {
                 var c = child[j];
                 if (c && typeof c.type === 'string') {
@@ -32,20 +38,6 @@ function walk (node, parent, cb) {
                 }
             }
         }
-        else if (child && typeof child.type === 'string') {
-            child.parent = node;
-            walk(child, node, cb);
-        }
     }
     cb(node);
 }
-
-var isArray = Array.isArray || function (xs) {
-    return Object.prototype.toString.call(xs) === '[object Array]';
-};
-
-var objectKeys = Object.keys || function (obj) {
-    var keys = [];
-    for (var key in obj) keys.push(key);
-    return keys;
-};
