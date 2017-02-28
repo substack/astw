@@ -1,15 +1,22 @@
-var parse = require('acorn').parse;
+var acorn = require('acorn');
+var defined = require('defined');
 
-module.exports = function (src) {
+
+module.exports = function (src, opts) {
+    if (!opts) opts = {};
+    opts.acorn = defined(opts.acorn, {});
+    acorn = defined(opts.acorn.parser, acorn);
+    opts = Object.assign({}, {
+        ecmaVersion: 6,
+        allowReturnOutsideFunction: true,
+    }, opts.acorn.opts);
+
     var ast = src;
     if (typeof src === 'string') {
         try {
-            ast = parse(src, {
-                ecmaVersion: 6,
-                allowReturnOutsideFunction: true
-            })
+            ast = acorn.parse(src, opts);
         }
-        catch (err) { ast = parse('(' + src + ')') }
+        catch (err) { ast = acorn.parse('(' + src + ')') }
     }
     return function (cb) {
         walk(ast, undefined, cb);
