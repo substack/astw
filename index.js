@@ -12,9 +12,14 @@ module.exports = function (src, opts) {
         }
         catch (err) { ast = parse('(' + src + ')') }
     }
-    return function (cb) {
+
+    function walker (cb) {
         walk(ast, undefined, cb);
-    };
+    }
+
+    walker.ast = ast;
+
+    return walker;
 };
 
 function walk (node, parent, cb) {
