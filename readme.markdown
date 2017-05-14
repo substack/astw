@@ -43,6 +43,10 @@ Walk the nodes in the ast with `cb(node)` where `node` is each element in the
 ast from [esprima](http://esprima.org/) but with an additional `.parent`
 reference to the parent node.
 
+## walk.ast
+
+Direct access to the parsed AST is still available at `walk.ast`.
+
 # install
 
 With [npm](https://npmjs.org) do:
