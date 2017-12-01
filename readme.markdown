@@ -35,7 +35,7 @@ Return a `walk()` function from the source string or ast object `src`.
 
 Optionally:
 
-* `opts.ecmaVersion` - default: 8
+* `opts.ecmaVersion` - default: 9
 
 ## walk(cb)
 

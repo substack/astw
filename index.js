@@ -6,7 +6,7 @@ module.exports = function (src, opts) {
     if (typeof src === 'string') {
         try {
             ast = parse(src, {
-                ecmaVersion: opts.ecmaVersion || 8,
+                ecmaVersion: opts.ecmaVersion || 9,
                 allowReturnOutsideFunction: true
             })
         }
