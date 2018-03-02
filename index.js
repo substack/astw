@@ -1,16 +1,20 @@
-var parse = require('acorn').parse;
+var xtend = require('xtend');
 
 module.exports = function (src, opts) {
-    if (!opts) opts = {}
+    if (!opts) opts = {};
+
+    var parser = opts.parser || require('acorn');
+    opts = xtend({
+        ecmaVersion: 9,
+        allowReturnOutsideFunction: true
+    }, opts);
+
     var ast = src;
     if (typeof src === 'string') {
         try {
-            ast = parse(src, {
-                ecmaVersion: opts.ecmaVersion || 8,
-                allowReturnOutsideFunction: true
-            })
+            ast = parser.parse(src, opts)
         }
-        catch (err) { ast = parse('(' + src + ')') }
+        catch (err) { ast = parser.parse('(' + src + ')', opts) }
     }
     return function (cb) {
         walk(ast, undefined, cb);

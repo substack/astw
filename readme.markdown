@@ -35,13 +35,17 @@ Return a `walk()` function from the source string or ast object `src`.
 
 Optionally:
 
-* `opts.ecmaVersion` - default: 8
+* `opts.parser` - a parser module with a `.parse(source, opts)` method, defaults
+  to [`require('acorn')`](https://github.com/acornjs/acorn).
+* `opts.ecmaVersion` - default: 9
+
+Other options are passed through to the `parser.parse` function.
 
 ## walk(cb)
 
 Walk the nodes in the ast with `cb(node)` where `node` is each element in the
-ast from [esprima](http://esprima.org/) but with an additional `.parent`
-reference to the parent node.
+ast from [acorn](https://github.com/acornjs/acorn) but with an additional
+`.parent` reference to the parent node.
 
 # install
 
